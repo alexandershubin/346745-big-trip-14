@@ -1,4 +1,4 @@
-import {createPriceTripTemplate} from "./price-trip";
+import {createPriceTripTemplate} from './price-trip';
 
 export const createInfoTripTemplate = () => {
   return `<section class="trip-main__trip-info  trip-info">
@@ -7,5 +7,5 @@ export const createInfoTripTemplate = () => {
               <p class="trip-info__dates">Mar 18&nbsp;&mdash;&nbsp;20</p>
             </div>
            ${createPriceTripTemplate()}
-          </section>`
-}
+          </section>`;
+};

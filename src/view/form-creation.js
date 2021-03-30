@@ -163,5 +163,5 @@ export const createFormCreationTemplate = () => {
                     </div>
                   </section>
                 </section>
-              </form>`
-}
+              </form>`;
+};

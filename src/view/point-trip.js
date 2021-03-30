@@ -37,5 +37,5 @@ export const createPointTripTemplate = () => {
                 </button>
               </div>
             </li>
-          </ul>`
-}
+          </ul>`;
+};

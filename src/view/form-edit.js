@@ -148,5 +148,5 @@ export const createFormEditTemplate = () => {
                     </div>
                   </section>
                 </section>
-              </form>`
-}
+              </form>`;
+};
