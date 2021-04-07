@@ -22,7 +22,6 @@ export const createOffersTemplate = () => {
   }).join('')}`;
 };
 
-
 export const createFormCreationTemplate = (isCreating) => {
   const {description, photos, cities, pointTypes} = isCreating;
 
