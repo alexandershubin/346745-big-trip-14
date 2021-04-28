@@ -1,3 +1,4 @@
+import {createElement} from '../utils';
 import {offers, pointType} from '../const';
 
 export const createEventTypeTemplate = () => {
@@ -22,10 +23,10 @@ export const createOffersTemplate = () => {
   }).join('')}`;
 };
 
-export const createFormCreationTemplate = (isCreating) => {
-  const {description, photos, cities, pointTypes} = isCreating;
+const createFormCreationTemplate = (items) => {
+  const {description, photos, cities, pointTypes} = items;
 
-  return ` <form class="event event--edit" action="#" method="post">
+  return `<form class="event event--edit" action="#" method="post">
                 <header class="event__header">
                   <div class="event__type-wrapper">
                     <label class="event__type  event__type-btn" for="event-type-toggle-1">
@@ -93,3 +94,26 @@ export const createFormCreationTemplate = (isCreating) => {
                 </section>
               </form>`;
 };
+
+export default class FormCreation {
+  constructor(items) {
+    this._items = items;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFormCreationTemplate(this._items);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

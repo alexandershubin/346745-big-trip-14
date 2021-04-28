@@ -1,6 +1,7 @@
-import {createOffersTemplate, createEventTypeTemplate} from './form-creation';
+import {createElement} from '../utils';
+import {createEventTypeTemplate, createOffersTemplate} from './form-creation';
 
-export const createFormEditTemplate = (isCreating) => {
+const createFormEditTemplate = (isCreating) => {
   const {cities, pointTypes} = isCreating;
 
   return `<form class="event event--edit" action="#" method="post">
@@ -60,3 +61,26 @@ export const createFormEditTemplate = (isCreating) => {
                 </section>
               </form>`;
 };
+
+export default class FormEdit {
+  constructor(isCreating) {
+    this._isCreating = isCreating;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFormEditTemplate(this._isCreating);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

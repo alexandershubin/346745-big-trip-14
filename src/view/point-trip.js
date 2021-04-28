@@ -1,6 +1,6 @@
-import {generateStartDate, getDiffTime} from '../utils';
+import {createElement, generateStartDate, getDiffTime} from '../utils';
 
-export const createPointTripTemplate = (point) => {
+const createPointTripTemplate = (point) => {
   const {cities, pointTypes, offers, isFavorite} = point;
   const favoriteActive = isFavorite ? 'event__favorite-btn--active' : '';
 
@@ -62,3 +62,27 @@ export const createPointTripTemplate = (point) => {
             </li>
           </ul>`;
 };
+
+
+export default class PointTrip {
+  constructor(point) {
+    this._point = point;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createPointTripTemplate(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
