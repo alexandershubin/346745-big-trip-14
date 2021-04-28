@@ -88,11 +88,5 @@ const renderBoard = (boardContainer, boardTasks) => {
 render(siteHeaderElement, new TripInfoView().getElement(), RenderPosition.AFTERBEGIN);
 render(siteNavElement, new MenuView().getElement(), RenderPosition.BEFOREEND);
 render(siteFilterElement, new FilterView().getElement(), RenderPosition.BEFOREEND);
-// render(siteMainElement, new FormEditView(points[0]).getElement(), RenderPosition.BEFOREEND);
-// render(siteMainElement, new FormCreationView(points[0]).getElement(), RenderPosition.BEFOREEND); // форма создания пока скрыта
-
-// for (let i = 0; i < TASK_COUNT; i++) {
-//   render(siteMainElement, new PointTripView(points[i]).getElement(), RenderPosition.BEFOREEND);
-// }
 
 renderBoard(siteMainElement, points);
