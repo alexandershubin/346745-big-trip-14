@@ -7,13 +7,13 @@ import SortView from './view/sort';
 import TripInfoView from './view/trip-info';
 import BoardView from './view/board';
 import PointListView from './view/point-list';
-import NoTaskView from './view/no-point';
+import NoPointView from './view/no-point';
 import {generatePoint} from './mock/point';
 import {render, RenderPosition} from './utils.js';
 
-const TASK_COUNT = 13;
+const POINT_COUNT = 13;
 const TASK_COUNT_PER_STEP = 8;
-const points = new Array(TASK_COUNT).fill().map(generatePoint);
+const points = new Array(POINT_COUNT).fill().map(generatePoint);
 
 const siteHeaderElement = document.querySelector('.trip-main');
 const siteNavElement = siteHeaderElement.querySelector('.trip-controls__navigation');
@@ -59,12 +59,12 @@ const renderPoint = (pointListElement, point) => {
   render(pointListElement, pointComponent.getElement(), RenderPosition.BEFOREEND);
 };
 
-const renderBoard = (boardContainer, boardTasks) => {
+const renderBoard = (boardContainer, boardPoint) => {
   const boardComponent = new BoardView();
-  const taskListComponent = new PointListView();
+  const pointListComponent = new PointListView();
 
   render(boardContainer, boardComponent.getElement(), RenderPosition.BEFOREEND);
-  render(boardComponent.getElement(), taskListComponent.getElement(), RenderPosition.BEFOREEND);
+  render(boardComponent.getElement(), pointListComponent.getElement(), RenderPosition.BEFOREEND);
 
   // По условию заглушка должна показываться,
   // когда нет задач или все задачи в архиве.
@@ -73,14 +73,14 @@ const renderBoard = (boardContainer, boardTasks) => {
   // Но благодаря тому, что на пустом массиве every вернёт true,
   // мы можем опустить "tasks.length === 0".
   // p.s. А метод some на пустом массиве наборот вернет false
-  if (boardTasks.every((task) => task.isFavorite)) {
-    render(boardComponent.getElement(), new NoTaskView().getElement(), RenderPosition.AFTERBEGIN);
+  if (boardPoint.every((point) => point.isFavorite)) {
+    render(boardComponent.getElement(), new NoPointView().getElement(), RenderPosition.AFTERBEGIN);
     return;
   }
 
-  boardTasks
+  boardPoint
     .slice(0, Math.min(points.length, TASK_COUNT_PER_STEP))
-    .forEach((boardTask) => renderPoint(taskListComponent.getElement(), boardTask));
+    .forEach((boardTask) => renderPoint(pointListComponent.getElement(), boardTask));
 
   render(boardComponent.getElement(), new SortView().getElement(), RenderPosition.AFTERBEGIN);
 };
