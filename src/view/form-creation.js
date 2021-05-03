@@ -1,5 +1,5 @@
-import {createElement} from '../utils';
 import {offers, pointType} from '../const';
+import Abstract from './abstract';
 
 export const createEventTypeTemplate = () => {
   return `${pointType.map((point) => {
@@ -95,25 +95,13 @@ const createFormCreationTemplate = (items) => {
               </form>`;
 };
 
-export default class FormCreation {
+export default class FormCreation extends Abstract {
   constructor(items) {
+    super();
     this._items = items;
-    this._element = null;
   }
 
   getTemplate() {
     return createFormCreationTemplate(this._items);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

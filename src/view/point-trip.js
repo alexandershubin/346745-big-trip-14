@@ -1,4 +1,5 @@
 import {createElement, generateStartDate, getDiffTime} from '../utils';
+import Abstract from './abstract';
 
 const createPointTripTemplate = (point) => {
   const {cities, pointTypes, offers, isFavorite} = point;
@@ -64,25 +65,13 @@ const createPointTripTemplate = (point) => {
 };
 
 
-export default class PointTrip {
+export default class PointTrip extends Abstract {
   constructor(point) {
+    super();
     this._point = point;
-    this._element = null;
   }
 
   getTemplate() {
     return createPointTripTemplate(this._point);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

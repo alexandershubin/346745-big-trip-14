@@ -1,5 +1,6 @@
 import {createElement} from '../utils';
 import {createEventTypeTemplate, createOffersTemplate} from './form-creation';
+import Abstract from './abstract';
 
 const createFormEditTemplate = (isCreating) => {
   const {cities, pointTypes} = isCreating;
@@ -62,25 +63,13 @@ const createFormEditTemplate = (isCreating) => {
               </form>`;
 };
 
-export default class FormEdit {
+export default class FormEdit extends Abstract {
   constructor(isCreating) {
+    super();
     this._isCreating = isCreating;
-    this._element = null;
   }
 
   getTemplate() {
     return createFormEditTemplate(this._isCreating);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

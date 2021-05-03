@@ -11,8 +11,7 @@ import NoPointView from './view/no-point';
 import {generatePoint} from './mock/point';
 import {render, RenderPosition} from './utils.js';
 
-const POINT_COUNT = 13;
-const TASK_COUNT_PER_STEP = 8;
+const POINT_COUNT = 3;
 const points = new Array(POINT_COUNT).fill().map(generatePoint);
 
 const siteHeaderElement = document.querySelector('.trip-main');
@@ -79,7 +78,6 @@ const renderBoard = (boardContainer, boardPoint) => {
   }
 
   boardPoint
-    .slice(0, Math.min(points.length, TASK_COUNT_PER_STEP))
     .forEach((boardTask) => renderPoint(pointListComponent.getElement(), boardTask));
 
   render(boardComponent.getElement(), new SortView().getElement(), RenderPosition.AFTERBEGIN);
