@@ -7,13 +7,12 @@ import SortView from './view/sort';
 import TripInfoView from './view/trip-info';
 import BoardView from './view/board';
 import PointListView from './view/point-list';
-import NoTaskView from './view/no-point';
+import NoPointView from './view/no-point';
 import {generatePoint} from './mock/point';
-import {render, RenderPosition} from './utils.js';
+import {render, replace, RenderPosition} from './utils/render';
 
-const TASK_COUNT = 13;
-const TASK_COUNT_PER_STEP = 8;
-const points = new Array(TASK_COUNT).fill().map(generatePoint);
+const POINT_COUNT = 3;
+const points = new Array(POINT_COUNT).fill().map(generatePoint);
 
 const siteHeaderElement = document.querySelector('.trip-main');
 const siteNavElement = siteHeaderElement.querySelector('.trip-controls__navigation');
@@ -25,11 +24,11 @@ const renderPoint = (pointListElement, point) => {
   const pointEditComponent = new FormCreationView(point);
 
   const replaceCardToForm = () => {
-    pointListElement.replaceChild(pointEditComponent.getElement(), pointComponent.getElement());
+    replace(pointEditComponent, pointComponent);
   };
 
   const replaceFormToCard = () => {
-    pointListElement.replaceChild(pointComponent.getElement(), pointEditComponent.getElement());
+    replace(pointComponent, pointEditComponent);
   };
 
   const onEscKeyDown = (evt) => {
@@ -40,31 +39,25 @@ const renderPoint = (pointListElement, point) => {
     }
   };
 
-  pointComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+  pointComponent.setEditClickHandler(() => {
     replaceCardToForm();
     document.addEventListener('keydown', onEscKeyDown);
   });
 
-  pointEditComponent.getElement().querySelector('.event__reset-btn').addEventListener('click', (evt) => {
-    evt.preventDefault();
-    replaceFormToCard();
-  });
-
-  pointEditComponent.getElement().querySelector('.event__save-btn').addEventListener('submit', (evt) => {
-    evt.preventDefault();
+  pointEditComponent.setFormSubmitHandler(() => {
     replaceFormToCard();
     document.removeEventListener('keydown', onEscKeyDown);
   });
 
-  render(pointListElement, pointComponent.getElement(), RenderPosition.BEFOREEND);
+  render(pointListElement, pointComponent, RenderPosition.BEFOREEND);
 };
 
-const renderBoard = (boardContainer, boardTasks) => {
+const renderBoard = (boardContainer, boardPoint) => {
   const boardComponent = new BoardView();
-  const taskListComponent = new PointListView();
+  const pointListComponent = new PointListView();
 
-  render(boardContainer, boardComponent.getElement(), RenderPosition.BEFOREEND);
-  render(boardComponent.getElement(), taskListComponent.getElement(), RenderPosition.BEFOREEND);
+  render(boardContainer, boardComponent, RenderPosition.BEFOREEND);
+  render(boardComponent, pointListComponent, RenderPosition.BEFOREEND);
 
   // По условию заглушка должна показываться,
   // когда нет задач или все задачи в архиве.
@@ -73,20 +66,19 @@ const renderBoard = (boardContainer, boardTasks) => {
   // Но благодаря тому, что на пустом массиве every вернёт true,
   // мы можем опустить "tasks.length === 0".
   // p.s. А метод some на пустом массиве наборот вернет false
-  if (boardTasks.every((task) => task.isFavorite)) {
-    render(boardComponent.getElement(), new NoTaskView().getElement(), RenderPosition.AFTERBEGIN);
+  if (boardPoint.every((point) => point.isFavorite)) {
+    render(boardComponent, new NoPointView(), RenderPosition.AFTERBEGIN);
     return;
   }
 
-  boardTasks
-    .slice(0, Math.min(points.length, TASK_COUNT_PER_STEP))
-    .forEach((boardTask) => renderPoint(taskListComponent.getElement(), boardTask));
+  boardPoint
+    .forEach((boardTask) => renderPoint(pointListComponent, boardTask));
 
-  render(boardComponent.getElement(), new SortView().getElement(), RenderPosition.AFTERBEGIN);
+  render(boardComponent, new SortView(), RenderPosition.AFTERBEGIN);
 };
 
-render(siteHeaderElement, new TripInfoView().getElement(), RenderPosition.AFTERBEGIN);
-render(siteNavElement, new MenuView().getElement(), RenderPosition.BEFOREEND);
-render(siteFilterElement, new FilterView().getElement(), RenderPosition.BEFOREEND);
+render(siteHeaderElement, new TripInfoView(), RenderPosition.AFTERBEGIN);
+render(siteNavElement, new MenuView(), RenderPosition.BEFOREEND);
+render(siteFilterElement, new FilterView(), RenderPosition.BEFOREEND);
 
 renderBoard(siteMainElement, points);

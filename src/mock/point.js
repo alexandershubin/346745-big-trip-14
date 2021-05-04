@@ -1,4 +1,5 @@
-import {getRandomInteger, generateForData, generateDescription, createPhotoTemplate} from '../utils';
+import {generateForData, generateDescription, createPhotoTemplate} from '../utils/point';
+import {getRandomInteger} from '../utils/common';
 import {pointType, cities, description, offers} from '../const';
 
 export const generatePoint = () => {
