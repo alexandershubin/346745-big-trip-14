@@ -99,9 +99,21 @@ export default class FormCreation extends Abstract {
   constructor(items) {
     super();
     this._items = items;
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
   }
 
   getTemplate() {
     return createFormCreationTemplate(this._items);
+  }
+
+  _formSubmitHandler(evt) {
+    evt.preventDefault();
+    this._callback.formSubmit();
+  }
+
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().querySelector('.event__save-btn').addEventListener('submit', this._formSubmitHandler);
+    this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._formSubmitHandler);
   }
 }

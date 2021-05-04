@@ -1,4 +1,4 @@
-import {createElement, generateStartDate, getDiffTime} from '../utils';
+import {generateStartDate, getDiffTime} from '../utils/point';
 import Abstract from './abstract';
 
 const createPointTripTemplate = (point) => {
@@ -69,9 +69,20 @@ export default class PointTrip extends Abstract {
   constructor(point) {
     super();
     this._point = point;
+    this._editClickHandler = this._editClickHandler.bind(this);
   }
 
   getTemplate() {
     return createPointTripTemplate(this._point);
+  }
+
+  _editClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.editClick();
+  }
+
+  setEditClickHandler(callback) {
+    this._callback.editClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
   }
 }

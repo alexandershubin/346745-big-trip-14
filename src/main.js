@@ -9,7 +9,7 @@ import BoardView from './view/board';
 import PointListView from './view/point-list';
 import NoPointView from './view/no-point';
 import {generatePoint} from './mock/point';
-import {render, RenderPosition} from './utils.js';
+import {render, replace, RenderPosition} from './utils/render';
 
 const POINT_COUNT = 3;
 const points = new Array(POINT_COUNT).fill().map(generatePoint);
@@ -24,11 +24,11 @@ const renderPoint = (pointListElement, point) => {
   const pointEditComponent = new FormCreationView(point);
 
   const replaceCardToForm = () => {
-    pointListElement.replaceChild(pointEditComponent.getElement(), pointComponent.getElement());
+    replace(pointEditComponent, pointComponent);
   };
 
   const replaceFormToCard = () => {
-    pointListElement.replaceChild(pointComponent.getElement(), pointEditComponent.getElement());
+    replace(pointComponent, pointEditComponent);
   };
 
   const onEscKeyDown = (evt) => {
@@ -39,31 +39,25 @@ const renderPoint = (pointListElement, point) => {
     }
   };
 
-  pointComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+  pointComponent.setEditClickHandler(() => {
     replaceCardToForm();
     document.addEventListener('keydown', onEscKeyDown);
   });
 
-  pointEditComponent.getElement().querySelector('.event__reset-btn').addEventListener('click', (evt) => {
-    evt.preventDefault();
-    replaceFormToCard();
-  });
-
-  pointEditComponent.getElement().querySelector('.event__save-btn').addEventListener('submit', (evt) => {
-    evt.preventDefault();
+  pointEditComponent.setFormSubmitHandler(() => {
     replaceFormToCard();
     document.removeEventListener('keydown', onEscKeyDown);
   });
 
-  render(pointListElement, pointComponent.getElement(), RenderPosition.BEFOREEND);
+  render(pointListElement, pointComponent, RenderPosition.BEFOREEND);
 };
 
 const renderBoard = (boardContainer, boardPoint) => {
   const boardComponent = new BoardView();
   const pointListComponent = new PointListView();
 
-  render(boardContainer, boardComponent.getElement(), RenderPosition.BEFOREEND);
-  render(boardComponent.getElement(), pointListComponent.getElement(), RenderPosition.BEFOREEND);
+  render(boardContainer, boardComponent, RenderPosition.BEFOREEND);
+  render(boardComponent, pointListComponent, RenderPosition.BEFOREEND);
 
   // По условию заглушка должна показываться,
   // когда нет задач или все задачи в архиве.
@@ -73,18 +67,18 @@ const renderBoard = (boardContainer, boardPoint) => {
   // мы можем опустить "tasks.length === 0".
   // p.s. А метод some на пустом массиве наборот вернет false
   if (boardPoint.every((point) => point.isFavorite)) {
-    render(boardComponent.getElement(), new NoPointView().getElement(), RenderPosition.AFTERBEGIN);
+    render(boardComponent, new NoPointView(), RenderPosition.AFTERBEGIN);
     return;
   }
 
   boardPoint
-    .forEach((boardTask) => renderPoint(pointListComponent.getElement(), boardTask));
+    .forEach((boardTask) => renderPoint(pointListComponent, boardTask));
 
-  render(boardComponent.getElement(), new SortView().getElement(), RenderPosition.AFTERBEGIN);
+  render(boardComponent, new SortView(), RenderPosition.AFTERBEGIN);
 };
 
-render(siteHeaderElement, new TripInfoView().getElement(), RenderPosition.AFTERBEGIN);
-render(siteNavElement, new MenuView().getElement(), RenderPosition.BEFOREEND);
-render(siteFilterElement, new FilterView().getElement(), RenderPosition.BEFOREEND);
+render(siteHeaderElement, new TripInfoView(), RenderPosition.AFTERBEGIN);
+render(siteNavElement, new MenuView(), RenderPosition.BEFOREEND);
+render(siteFilterElement, new FilterView(), RenderPosition.BEFOREEND);
 
 renderBoard(siteMainElement, points);

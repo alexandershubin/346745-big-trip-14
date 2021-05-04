@@ -1,4 +1,3 @@
-import {createElement} from '../utils';
 import {createEventTypeTemplate, createOffersTemplate} from './form-creation';
 import Abstract from './abstract';
 
